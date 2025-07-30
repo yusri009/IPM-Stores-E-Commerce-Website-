@@ -1,0 +1,43 @@
+@import "tailwindcss";
+@plugin "daisyui";
+body{
+    background-color:rgb(255, 255, 255);
+}
+
+.subheading {
+    text-align: center;
+    font-size: larger;
+    margin: 20px 0;
+    color: rgb(5, 70, 192);
+    font-weight: 700;
+    background-color: rgba(177, 177, 177, 0.26);
+    padding: 12px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(42, 94, 190, 0.08);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.subheading::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #2a5ebe 0%, #0546c0 100%);
+    transition: width 0.3s ease, left 0.3s ease;
+}
+
+.subheading:hover {
+    background-color: rgba(42, 94, 190, 0.12);
+    color: #7185db;
+    box-shadow: 0 4px 16px rgba(42, 94, 190, 0.15);
+}
+
+.subheading:hover::after {
+    width: 80%;
+    left: 10%;
+}
