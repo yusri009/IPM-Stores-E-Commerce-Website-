@@ -21,7 +21,7 @@ export default function CategoryLayout({ children }) {
   return (
     <>
       <Header />
-      <div className="flex min-h-screen">
+      <div className={"flex min-h-screen "}>
         {/* Sidebar */}
         <aside className="w-64 bg-gray-100 border-r border-gray-300 relative">
           {/* Categories Section */}
@@ -33,7 +33,7 @@ export default function CategoryLayout({ children }) {
               {categories.map((cat) => {
                 const active = pathname === `/Category/${cat.slug}`;
                 return (
-                  <li key={cat.id}>
+                  <li key={cat._id}>
                     <Link
                       href={`/Category/${cat.slug}`}
                       className={`block px-3 py-2 rounded-lg hover:bg-blue-100 transition-all duration-200 ${

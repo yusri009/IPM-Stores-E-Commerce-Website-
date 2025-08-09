@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors'; // ✅ Import CORS
 import categoryRoutes from './routes/category.js';
 import productRoutes from './routes/product.js';
+import UserRoutes from './routes/user.js';
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ mongoose.connect(process.env.MONGO_URI)
 // ✅ API Routes
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/users', UserRoutes);
 
 // ✅ Start server
 app.listen(PORT, () => {

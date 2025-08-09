@@ -1,5 +1,9 @@
 'use client';
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
+import { useAuth } from '../../components/Context/authContext';
+import { toast } from 'react-toastify';
 
 const CartContext = createContext();
 
@@ -13,126 +17,100 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCartOpenClose, setIsCartOpenClose] = useState(false);
+  const {user, setUser, isLoggedIn} = useAuth();
+  // const storedUser = localStorage.getItem('user');
+  // console.log("userId: "+storedUser)
 
-  // Load cart from localStorage on mount
+  // ✅ safely fetch user from localStorage on mount
   useEffect(() => {
-    try {
-      const savedCart = localStorage.getItem('cart');
-      if (savedCart && savedCart !== 'undefined' && savedCart !== 'null') {
-        const parsedCart = JSON.parse(savedCart);
-        if (Array.isArray(parsedCart)) {
-          setCart(parsedCart);
+    const storedUser = localStorage.getItem('user');
+    console.log("userId: "+storedUser)
+    if (storedUser) {
+      try {
+        const user = JSON.parse(storedUser);
+        console.log(user.id)
+        if (user.id) {
+          setUser(user);
+          console.log("✅ Fetched userId from localStorage:", user.id);
         }
+      } catch (error) {
+        console.error("❌ Failed to parse user:", error);
       }
-    } catch (error) {
-      console.error('Error loading cart from localStorage:', error);
-      // Clear invalid data and start fresh
-      localStorage.removeItem('cart');
-      setCart([]);
     }
   }, []);
 
-  // Save cart to localStorage whenever cart changes
-  useEffect(() => {
+  // ✅ define fetchCart function outside useEffect so it can be reused
+  const fetchCart = async () => {
+    if (!user) return;
+
     try {
-      localStorage.setItem('cart', JSON.stringify(cart));
-    } catch (error) {
-      console.error('Error saving cart to localStorage:', error);
+      const res = await axios.post('http://localhost:5000/api/users/get-cart', { userId:user.id });
+      setCart(res.data.cart);
+      console.log("🛒 Cart fetched:", res.data.cart);
+    } catch (err) {
+      console.error('❌ Error fetching cart:', err.message);
     }
-  }, [cart]);
-
-  const addToCart = (product) => {
-    console.log('🎯 ADD TO CART:', product);
-
-    // Handle different ID field names
-    const productId = product.id;
-    
-    // if (!productId) {
-    //   console.error('❌ No product ID found');
-    //   return;
-    // }
-
-    const updatedCart = [...cart];
-    const existingItem = updatedCart.find(item => Number(item.id) === Number(productId));
-    console.log(productId, existingItem);
-    
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      updatedCart.push({
-        id: Number(productId),
-        name: product.name || 'Unknown Product',
-        price: Number(product.price) || 0,
-        image: product.image || '',
-        category: product.category || '',
-        quantity: 1
-      });
-    }
-
-    console.log('🛒 Updated cart:', updatedCart);
-    setCart(updatedCart);
   };
 
-  const removeFromCart = (productId) => {
-    console.log('🗑️ REMOVE FROM CART:', productId);
-    const updatedCart = cart.filter(item => Number(item.id) !== Number(productId));
-    console.log('🛒 Cart after removal:', updatedCart);
-    setCart(updatedCart);
-  };
+  // ✅ fetch cart only after userId is available
+  useEffect(() => {
+    fetchCart();
+  }, [user]);
 
-  const updateQuantity = (productId, quantity) => {
-    if (quantity <= 0) {
-      removeFromCart(productId);
+  const addToCart = (productId) => {
+    if (!isLoggedIn) {
+      toast.error('Please log in to add items to cart');
       return;
     }
 
-    const updatedCart = cart.map(item =>
-      item.id === productId ? { ...item, quantity } : item
-    );
-    setCart(updatedCart);
+    axios.post('http://localhost:5000/api/users/add-to-cart', { userId:user.id, productId })
+      .then(res => {console.log(res);
+        fetchCart();
+      })
+      .catch(err => console.log(err));
   };
 
-  const getTotalItems = () => {
-    return cart.reduce((total, item) => total + item.quantity, 0);
+  const removeFromCart = (productId) => {
+    if (!user.id) {
+      toast.error('Please log in to remove items from cart');
+      return;
+    }
+
+    axios.post('http://localhost:5000/api/users/remove-from-cart', { userId:user.id, productId })
+      .then(result => {console.log(result);
+        fetchCart();
+      })
+      .catch(err => console.log(err));
   };
 
-  const getTotalPrice = () => {
-    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-  };
+  const getTotalItems = () => cart.reduce((total, item) => total + item.quantity, 0);
+  const getTotalPrice = () => cart.reduce((total, item) => total + (item.productId.price * item.quantity), 0);
+  const getQuantity = (productId) => cart.find(item => item.productId._id === productId)?.quantity || 0;
 
-  const getQuantity = (productId) => {
-    const item = cart.find(item => item.id === productId);
-    return item ? item.quantity : 0;
-  };
+  const openCloseCart = () => setIsCartOpenClose(!isCartOpenClose);
 
-  const openCart = () => {
-    setIsCartOpen(true);
-    console.log('🛒 Cart opened');
-  };
-  
-  const closeCart = () => {
-    setIsCartOpen(false);
-    console.log('🛒 Cart closed');
-  };
-  
+
   const clearCart = () => {
+     axios.post('http://localhost:5000/api/users/clear-cart', { userId:user.id })
+      .then(result => {console.log(result);
+        fetchCart();
+      })
+      .catch(err => console.log(err));
     setCart([]);
-    console.log('🗑️ Cart cleared');
+    localStorage.clear('cart');
   };
 
   return (
     <CartContext.Provider value={{
       cart,
-      isCartOpen,
+      isCartOpenClose,
       addToCart,
       removeFromCart,
-      updateQuantity,
       getTotalItems,
       getTotalPrice,
       getQuantity,
-      openCart,
-      closeCart,
+      openCloseCart,
       clearCart,
     }}>
       {children}

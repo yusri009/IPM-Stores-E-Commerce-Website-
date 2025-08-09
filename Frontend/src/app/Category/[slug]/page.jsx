@@ -8,7 +8,7 @@ export default function CategoryPage({ params }) {
   const resolvedParams = use(params);
   const { slug } = resolvedParams;
   
-  const { addToCart, getQuantity, getTotalItems, openCart } = useCart();
+  const { cart, addToCart,removeFromCart, getQuantity, getTotalItems, openCloseCart } = useCart();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -16,8 +16,6 @@ export default function CategoryPage({ params }) {
     fetch(`http://localhost:5000/api/products?categorySlug=${slug}`)
       .then(res => res.json())
       .then(data => {
-        console.log('Products fetched:', data);
-        console.log('First product ID:', data[0]?.id); // Now it's just 'id'!
         setProducts(data);
         setLoading(false);
       })
@@ -37,15 +35,18 @@ export default function CategoryPage({ params }) {
       
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map(product => {
-          const quantity = getQuantity(product.id); // Clean and simple!
+          const quantity = getQuantity(product._id); // Clean and simple!
           
           const handleAddToCart = () => {
-            addToCart(product);
+            addToCart(product._id);
           };
+          const handleRemoveFromCart = () => {
+            removeFromCart(product._id)
+          }
           
           return (
             <div 
-              key={product.id} 
+              key={product._id} 
               className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 overflow-hidden group"
             >
               {/* Product Image */}
@@ -87,7 +88,7 @@ export default function CategoryPage({ params }) {
                 <div className="flex items-center justify-center">
                   {quantity === 0 ? (
                     <button
-                      onClick={() => addToCart(product)} // Clean!
+                      onClick={handleAddToCart} // Clean!
                       className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl"
                     >
                       <ShoppingCart size={20} />
@@ -96,7 +97,7 @@ export default function CategoryPage({ params }) {
                   ) : (
                     <div className="flex items-center gap-3 bg-gray-100 rounded-full p-1">
                       <button
-                        onClick={() => removeFromCart(product.id)} // Clean!
+                        onClick={handleRemoveFromCart} // Clean!
                         className="p-1 text-blue-900 rounded-full border-2 transition-colors font-bold hover:text-blue-300"
                       >
                         <Minus size={16} />
@@ -107,9 +108,7 @@ export default function CategoryPage({ params }) {
                       </span>
                       
                       <button
-                        onClick={() => {
-                          addToCart(product);
-                          console.log(product.id)}} // Clean!
+                        onClick={handleAddToCart} // Clean!
                         className="p-1 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors"
                       >
                         <Plus size={16} />
@@ -127,7 +126,7 @@ export default function CategoryPage({ params }) {
       {getTotalItems() > 0 && (
         <div 
           className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl cursor-pointer hover:bg-green-600 transition-colors"
-          onClick={openCart}
+          onClick={openCloseCart}
         >
           <div className="flex items-center gap-2">
             <ShoppingCart size={24} />

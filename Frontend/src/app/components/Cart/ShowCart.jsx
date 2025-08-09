@@ -1,25 +1,28 @@
 'use client';
 import { useCart } from './Cart';
 import { X, Plus, Minus, ShoppingCart } from 'lucide-react';
+import { useAuth } from '../Context/authContext';
 
 export default function ShowCart() {
   const { 
     cart, 
-    isCartOpen, 
-    closeCart, 
+    openCloseCart,
+    isCartOpenClose,  
     removeFromCart, 
-    updateQuantity,
+    addToCart,
+    // updateQuantity,
     getTotalItems, 
     getTotalPrice,
     clearCart
   } = useCart();
-
-  if (!isCartOpen) return null;
+  const {user} = useAuth();
+  console.log(cart)
+  if (!isCartOpenClose) return null;
 
   return (
     <>
       {/* Cart Sidebar */}
-      <div className={`fixed right-0 top-0 h-full w-80 bg-white shadow-2xl z-50 transition-transform duration-300 flex flex-col border-l-4 border-blue-500 ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed right-0 top-0 h-full w-80 bg-white shadow-2xl z-50 transition-transform duration-300 flex flex-col border-l-4 border-blue-500 ${isCartOpenClose ? 'translate-x-0' : 'translate-x-full'}`}>
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-50 to-green-50">
           <div className="flex items-center gap-2">
@@ -27,7 +30,7 @@ export default function ShowCart() {
             <h2 className="text-xl font-bold text-gray-800">Shopping Cart</h2>
           </div>
           <button
-            onClick={closeCart}
+            onClick={openCloseCart}
             className="p-2 hover:bg-red-100 rounded-full transition-colors group"
           >
             <X size={20} className="group-hover:text-red-600 text-red-400" />
@@ -50,18 +53,30 @@ export default function ShowCart() {
                 </p>
               </div>
               
+
+
+
+
+
               <div className="space-y-3">
                 {cart.map(item => {
-                  const itemTotal = item.price * item.quantity;
+                  console.log("item",item)
+                  const itemTotal = item.productId.price * item.quantity;  
                   
+                  const handleAddToCart = () => {
+                    addToCart(item.productId._id);
+                  };
+                  const handleRemoveFromCart = () => {
+                    removeFromCart(item.productId._id)
+                  }
                   return (
-                    <div key={item.id} className="flex items-center gap-3 p-3 border rounded-lg hover:shadow-lg transition-all bg-white">
+                    <div key={item._id} className="flex items-center gap-3 p-3 border rounded-lg hover:shadow-lg transition-all bg-white">
                       {/* Product Image */}
                       <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                         {item.image ? (
                           <img 
-                            src={item.image} 
-                            alt={item.name}
+                            src={item.productId.image} 
+                            alt={item.productId.name}
                             className="w-full h-full object-cover"
                           />
                         ) : (
@@ -71,8 +86,8 @@ export default function ShowCart() {
                       
                       {/* Product Details */}
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-gray-800 truncate text-sm">{item.name}</h3>
-                        <p className="text-green-600 font-bold text-sm">{item.price} LKR</p>
+                        <h3 className="font-semibold text-gray-800 truncate text-sm">{item.productId.name}</h3>
+                        <p className="text-green-600 font-bold text-sm">{item.productId.price} LKR</p>
                         <p className="text-xs text-gray-500">
                           Subtotal: {itemTotal} LKR
                         </p>
@@ -82,7 +97,7 @@ export default function ShowCart() {
                       <div className="flex flex-col items-center gap-2">
                         <div className="flex items-center gap-1">
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            onClick={handleRemoveFromCart}
                             className="p-1 text-blue-900 rounded-full border-2 transition-colors font-bold hover:text-blue-300"
                           >
                             <Minus size={12} />
@@ -93,7 +108,7 @@ export default function ShowCart() {
                           </span>
                           
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            onClick={handleAddToCart}
                             className="p-1 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors"
                           >
                             <Plus size={12} />
