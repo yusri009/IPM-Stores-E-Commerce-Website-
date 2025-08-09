@@ -200,15 +200,24 @@ Suggested stack:
 
 ## 🔧 Configuration Points
 
-| Concern        | Location  cp .env.example .env   # (Create if example not present)
-# Edit MONGO_URI in .env                       | Notes |
-|----------------|----------------------------------|-------|
-| CORS           | Backend/server.js                | Restrict origins in production |
-| DB Connection  | Backend/server.js & `.env`       | Use separate prod URI |
-| Auth Persistence | Frontend AuthContext           | Replace with token/JWT in future |
-| Styles         | Frontend/src/app/globals.css     | Tailwind base + custom |
+| Concern           | Location                                                | Notes                                 |
+|-------------------|---------------------------------------------------------|---------------------------------------|
+| CORS              | Backend/server.js                                       | Restrict origins in production        |
+| DB Connection     | Backend/server.js & `.env`                              | Separate dev / prod URIs              |
+| Auth Persistence  | Frontend/src/app/components/Context/authContext.js      | Migrate to JWT / refresh tokens       |
+| Styles            | Frontend/src/app/globals.css                            | Tailwind base + custom overrides      |
 
----
+### Environment File Setup
+```bash
+cp Backend/.env.example Backend/.env  # if example exists
+# Then edit MONGO_URI in Backend/.env
+```
+If no example:
+```bash
+cat > Backend/.env <<'EOF'
+MONGO_URI=mongodb+srv://user:pass@cluster/DB_NAME
+EOF
+```
 
 ## 🛡️ Security Notes
 - Never commit real `MONGO_URI`
