@@ -148,8 +148,8 @@ Password hashing occurs in `models/User.js` pre‑save hook.
 
 ### 1. Clone
 ```bash
-git clone <your-repo-url>
-cd IPM-Stores
+git clone https://github.com/yusri009/IPM-Stores-E-Commerce-Website-.git
+cd ipm-stores
 ```
 
 ### 2. Backend
@@ -200,7 +200,8 @@ Suggested stack:
 
 ## 🔧 Configuration Points
 
-| Concern        | Location                         | Notes |
+| Concern        | Location  cp .env.example .env   # (Create if example not present)
+# Edit MONGO_URI in .env                       | Notes |
 |----------------|----------------------------------|-------|
 | CORS           | Backend/server.js                | Restrict origins in production |
 | DB Connection  | Backend/server.js & `.env`       | Use separate prod URI |
@@ -263,12 +264,6 @@ Suggested stack:
 | Cart context | `Frontend/src/app/components/Cart/Cart.jsx` |
 | Auth context | `Frontend/src/app/components/Context/authContext.js` |
 
----
-
-## 📄 License
-MIT (add `LICENSE` file in repo root).
-
----
 
 ## 🙌 Attribution
 Built with Next.js, Express
