@@ -40,7 +40,7 @@ const [confirmPassword, setConfirmPassword] = useState('');
 
 return (
     <div className="flex items-center justify-center min-h-screen bg-white">
-        <div className="bg-gradient-to-br from-indigo-700 via-blue-500 to-cyan-400 p-10 rounded-3xl shadow-2xl flex flex-col min-w-[340px] w-full max-w-md border border-blue-100">
+        <div className="bg-gradient-to-br bg-blue-600 p-10 rounded-3xl shadow-2xl flex flex-col min-w-[340px] w-full max-w-md border border-blue-100">
             <div className="flex flex-col items-center mb-8">
                 <h1 className="text-3xl font-extrabold text-white mb-1 tracking-wide">Welcome Back!</h1>
                 <p className="text-blue-100 text-sm">Sign in to your IPM Stores account</p>

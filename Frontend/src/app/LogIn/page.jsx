@@ -1,6 +1,6 @@
 'use client';
 
-import LogIn from '/home/yusri-ahamed/Projects/IPM-Stores/ipm-stores/Frontend/src/app/components/LogIn/login.jsx';
+import LogIn from '../components/SignIn/signIn.jsx';
 
 export default function LoginPage() {
   console.log("login page")

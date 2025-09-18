@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../../components/Context/authContext';
+import { useAuth } from '../Context/authContext';
 
 
 export default function Login() {
@@ -41,7 +41,7 @@ export default function Login() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
-      <div className="bg-gradient-to-br from-indigo-700 via-blue-500 to-cyan-400 p-10 rounded-3xl shadow-2xl flex flex-col min-w-[340px] w-full max-w-md border border-blue-100">
+      <div className="bg-gradient-to-br bg-blue-600 p-10 rounded-3xl shadow-2xl flex flex-col min-w-[340px] w-full max-w-md border border-blue-100">
         <div className="flex flex-col items-center mb-8">
           {/* <img src="https://img.icons8.com/fluency/96/000000/user-shield.png" alt="Login Icon" className="mb-2" /> */}
           <h1 className="text-3xl font-extrabold text-white mb-1 tracking-wide">Welcome Back!</h1>
@@ -97,7 +97,7 @@ export default function Login() {
         </div>
         <button
           onClick={handleHome}
-          className="mt-6 w-full bg-white text-cyan-600 py-2 rounded-lg font-semibold shadow hover:bg-blue-100 transition-colors duration-300"
+          className="mt-6 w-full bg-white text-blue-600 py-2 rounded-lg font-semibold  hover:bg-blue-600 hover:text-white hover:border-white hover:border-1 transition-colors duration-300"
         >
           Return Home
         </button>

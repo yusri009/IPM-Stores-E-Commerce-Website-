@@ -73,9 +73,9 @@ export default function ShowCart() {
                     <div key={item._id} className="flex items-center gap-3 p-3 border rounded-lg hover:shadow-lg transition-all bg-white">
                       {/* Product Image */}
                       <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
-                        {item.image ? (
+                        {item.productId.image ? (
                           <img 
-                            src={item.productId.image} 
+                            src={`/${item.productId.image}`} 
                             alt={item.productId.name}
                             className="w-full h-full object-cover"
                           />
