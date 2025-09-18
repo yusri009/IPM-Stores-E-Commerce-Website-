@@ -24,8 +24,10 @@ function ReachUs() {
   };
 
   return (
-    <>
+    <><div className='m-8'>
         <h2 className="subheading">Reach Us</h2>
+    </div>
+        
         <section className="max-w-6xl mx-auto px-4 py-12">
         {/* <h1 className="subheading">Reach Us</h1> */}
       

@@ -8,11 +8,11 @@ import ReachUs from "./components/ReachUs/ReachUs.jsx";
 
 export default function Home() {
   return (
-    <>
+    <div className='bg-blue-50'>
       <Header />
       <CounterSection />
       <Categories />
       <ReachUs />
-    </>
+    </div>
   );
 }

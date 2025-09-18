@@ -7,10 +7,10 @@ body{
 .subheading {
     text-align: center;
     font-size: larger;
-    margin: 20px 0;
-    color: rgb(5, 70, 192);
+    margin: 20px;
+    color: rgb(255, 255, 255);
     font-weight: 700;
-    background-color: rgba(177, 177, 177, 0.26);
+    background-color: rgb(58, 110, 255);
     padding: 12px 0;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(42, 94, 190, 0.08);
@@ -20,7 +20,7 @@ body{
     transition: background 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
-.subheading::after {
+/* .subheading::after {
     content: '';
     position: absolute;
     left: 50%;
@@ -29,15 +29,15 @@ body{
     height: 3px;
     background: linear-gradient(90deg, #2a5ebe 0%, #0546c0 100%);
     transition: width 0.3s ease, left 0.3s ease;
-}
+} */
 
 .subheading:hover {
-    background-color: rgba(42, 94, 190, 0.12);
-    color: #7185db;
+    background-color: rgba(255, 255, 255, 0.12);
+    color: rgb(41, 98, 255);
     box-shadow: 0 4px 16px rgba(42, 94, 190, 0.15);
 }
 
-.subheading:hover::after {
+/* .subheading:hover::after {
     width: 80%;
     left: 10%;
-}
+} */

@@ -28,7 +28,7 @@ export default function CategoryPage({ params }) {
   if (loading) return <div className="p-8 text-center">Loading products...</div>;
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-blue-50 min-h-screen rounded-2xl">
       <h1 className="text-4xl font-bold mb-8 text-green-600 text-center">
         {products[0]?.categoryName || 'Products'}
       </h1>
@@ -47,7 +47,7 @@ export default function CategoryPage({ params }) {
           return (
             <div 
               key={product._id} 
-              className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 overflow-hidden group"
+              className="bg-white rounded-xl  hover:shadow-2xl transition-all duration-300 transform hover:scale-105 overflow-hidden group"
             >
               {/* Product Image */}
               <div className="h-48 relative overflow-hidden bg-gray-100">
